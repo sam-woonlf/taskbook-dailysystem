@@ -105,6 +105,16 @@ input[type="date"],input[type="time"]{min-height:38px}
 }
 .section-title{font-size:14.5px;font-weight:650;color:var(--ink)}
 .section-hint{font-size:12px;color:var(--muted);margin-left:auto}
+.group-toggle{
+  display:flex;align-items:center;gap:9px;width:100%;
+  border:0;background:transparent;padding:12px 18px;text-align:left;
+  font:inherit;color:inherit;
+}
+.group-toggle:hover{background:#f7f9fd}
+.group-toggle:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+.group-toggle .chev{color:var(--muted);font-size:12px;transition:transform var(--anim) var(--ease-out)}
+.group-toggle.open .chev{transform:rotate(180deg)}
+.group-tail{margin-left:auto;display:flex;align-items:center;gap:9px;min-width:0}
 .count-pill{
   min-width:22px;height:22px;padding:0 7px;border-radius:11px;
   background:#e8edf7;color:#526079;font-size:12px;font-weight:600;
@@ -950,6 +960,21 @@ li.task:hover{background:#fafafa}
 }
 .tpl-sub-add-input:focus,.tpl-sub-input:focus{border-color:var(--brand-2)}
 .tpl-sub-add-input:focus{box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+
+/* 模板：从已有任务挑选 */
+.tpl-pick-list{display:grid;gap:6px;max-height:320px;overflow:auto;margin:2px 0 8px;padding:1px}
+.tpl-pick-row{
+  display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:start;
+  border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;cursor:pointer;
+}
+.tpl-pick-row:hover{border-color:#c8d0de;background:#f8fafc}
+.tpl-pick-row input{margin:3px 0 0}
+.tpl-pick-main{display:flex;flex-direction:column;gap:4px;min-width:0}
+.tpl-pick-title{font-size:13.5px;color:var(--ink);word-break:break-word}
+.tpl-pick-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:11.5px;color:#777}
+.tpl-pick-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tpl-pick-count{margin-left:auto;font-size:12px;color:#777}
+.tpl-pick-empty{border:1px dashed #c6cede;background:#fafbfd;border-radius:10px;color:#98a0b3;font-size:12.5px;line-height:1.7;padding:13px 14px}
 @media (max-width:700px){
   .tpl-item-summary,.tpl-item-more{padding-left:0}
   .tpl-item-head{flex-wrap:wrap;row-gap:7px}
@@ -1535,6 +1560,7 @@ var activeView = 'today';
 var doneOpen = false;
 var subtaskOpen = {};
 var noteOpen = {};
+var groupCollapsed = {};
 var deletedSnapshot = null;
 var pomo = {
   mode: 'work',
@@ -1735,6 +1761,13 @@ function playRowExit(row, done){
 }
 function closestCollapse(node){
   return node && node.closest ? node.closest('.collapse') : null;
+}
+function groupCollapseEl(key){
+  var list = document.querySelectorAll('[data-group-collapse]');
+  for(var i = 0; i < list.length; i++){
+    if(list[i].getAttribute('data-group-collapse') === key) return list[i];
+  }
+  return null;
 }
 function stackToasts(){
   var list = $$('.toast');
@@ -2562,7 +2595,7 @@ function openManual(){
       '<ul>' +
         '<li>在「分类管理」中可以新增、重命名分类并自定义颜色；默认四类只是示例，和自定义分类一样可以重命名或删除，正在被任务使用的分类不可删除。</li>' +
         '<li>「任务库」支持按分类、状态筛选，也可按标题搜索，随时编辑或删除任务。</li>' +
-        '<li>在「管理 → 模板清单」中可以把常用的一组任务保存成模板：每项任务都能单独设置小任务、具体时间与备注，添加后也可随时删除；下次在新增栏点「模板」即可一键生成到今日清单。</li>' +
+        '<li>在「管理 → 模板清单」中可以把常用的一组任务保存成模板：每项任务都能单独设置小任务、具体时间与备注，添加后也可随时删除；还能用「从已有任务添加」直接从待办或<strong>已完成任务</strong>里挑选，或用「从已完成生成模板」一键建模板。下次在新增栏点「模板」即可生成到今日清单。</li>' +
       '</ul>' +
 
       '<h4>六、数据、同步与统计</h4>' +
@@ -2806,18 +2839,26 @@ function normalizeTemplateItem(it){
     subtasks: subs.slice(0,30)
   };
 }
+function templateItemsFromTasks(list, limit){
+  var max = typeof limit === 'number' ? limit : 50;
+  return (list || []).slice(0, max).map(function(t){
+    return {
+      title: t.title,
+      dueTime: t.dueTime || '',
+      note: typeof t.note === 'string' ? t.note : '',
+      subtasks: (t.subtasks || []).map(function(s){ return { title: s.title }; })
+    };
+  });
+}
 function pendingTemplateItems(){
-  return state.tasks
-    .filter(function(t){ return t.kind === 'once' && !t.archived && !t.completedOn; })
-    .slice(0,50)
-    .map(function(t){
-      return {
-        title: t.title,
-        dueTime: t.dueTime || '',
-        note: typeof t.note === 'string' ? t.note : '',
-        subtasks: (t.subtasks || []).map(function(s){ return { title: s.title }; })
-      };
-    });
+  return templateItemsFromTasks(state.tasks.filter(function(t){
+    return t.kind === 'once' && !t.archived && !t.completedOn;
+  }));
+}
+function completedTemplateItems(){
+  return templateItemsFromTasks(state.tasks.filter(function(t){
+    return t.kind === 'once' && !t.archived && !!t.completedOn;
+  }));
 }
 function openTemplateEditor(existing, sourceItems){
   var isEdit = !!existing;
@@ -2831,9 +2872,10 @@ function openTemplateEditor(existing, sourceItems){
     '<div class="field"><span>模板名称</span><input id="tplName" type="text" maxlength="30" value="' + esc(tpl.name || '') + '" placeholder="例如：晨间流程 / 周末大扫除"></div>' +
     '<div class="field" style="margin-bottom:6px"><span>模板任务</span></div>' +
     '<div class="tpl-item-list" id="tplItemList"></div>' +
-    '<div class="tpl-list-empty" id="tplListEmpty">还没有任务，点下方「＋ 添加任务」添加；每个任务都可以继续设置小任务和具体时间。</div>' +
+    '<div class="tpl-list-empty" id="tplListEmpty">还没有任务：可以点「＋ 添加任务」手动填写，或用「从已有任务添加」从待办 / 已完成里挑选。</div>' +
     '<div class="template-tools">' +
       '<button type="button" class="btn btn-sm btn-primary" data-add-item>＋ 添加任务</button>' +
+      '<button type="button" class="btn btn-sm" data-add-from-tasks>从已有任务添加</button>' +
     '</div>' +
     '<p class="template-hint">生成任务时会带上这里设置的小任务、具体时间与备注；添加的任务和整份模板都可以随时删除。</p>' +
     '<div class="dialog-form-actions">' +
@@ -3000,6 +3042,26 @@ function openTemplateEditor(existing, sourceItems){
     var inp = $('[data-role-title]', row);
     if(inp) inp.focus();
   });
+  $('[data-add-from-tasks]', form).addEventListener('click', function(){
+    openTemplateTaskPicker(function(items){
+      var added = 0, skipped = 0;
+      items.forEach(function(it){
+        var title = String(it.title || '').trim();
+        if(!title) return;
+        var dup = wrappers.some(function(w){ return String(w.item.title || '').trim() === title; });
+        if(dup){ skipped += 1; return; }
+        if(wrappers.length >= 50) return;
+        appendItem(it, true);
+        added += 1;
+      });
+      var last = wrappers[wrappers.length - 1];
+      if(last && last.row && last.row.scrollIntoView) last.row.scrollIntoView({ block: 'nearest' });
+      if(!added && skipped) toast('所选任务都已在模板中','error');
+      else if(added < items.length - skipped) toast('已添加 ' + added + ' 个任务，模板最多 50 个','error');
+      else if(skipped) toast('已添加 ' + added + ' 个任务，跳过 ' + skipped + ' 个重复项','ok');
+      else toast('已添加 ' + added + ' 个任务','ok');
+    });
+  });
   form.addEventListener('submit', function(e){
     e.preventDefault();
     var name = ($('#tplName', form).value || '').trim();
@@ -3035,6 +3097,124 @@ function openTemplateEditor(existing, sourceItems){
   });
   setTimeout(function(){ var inp = $('#tplName', form); if(inp) inp.focus(); }, 30);
 }
+function taskPickStatusLabel(t){
+  if(t.completedOn) return '已完成 · ' + fmtShort(t.completedOn);
+  if(t.dueDate === null || !t.dueDate) return '无期限';
+  if(t.dueDate === todayKey()) return '今天到期';
+  var n = diffDays(t.dueDate, todayKey());
+  return n > 0 ? ('逾期 ' + n + ' 天') : ('定于 ' + fmtShort(t.dueDate));
+}
+function openTemplateTaskPicker(onConfirm){
+  var d = makeDialog('从已有任务添加', '', '');
+  var body = $('.modal-body', d.root);
+  var form = el('<form class="dialog-form" autocomplete="off"></form>');
+  form.innerHTML =
+    '<div class="field-grid">' +
+      '<div class="field"><span>筛选</span><select id="tplPickStatus">' +
+        '<option value="done" selected>已完成</option>' +
+        '<option value="all">全部未归档</option>' +
+        '<option value="pending">待办中</option>' +
+      '</select></div>' +
+      '<div class="field"><span>搜索</span><input id="tplPickQuery" type="text" maxlength="40" placeholder="按标题筛选…"></div>' +
+    '</div>' +
+    '<div class="tpl-pick-list" id="tplPickList"></div>' +
+    '<div class="tpl-pick-tools">' +
+      '<button type="button" class="btn btn-sm" data-pick-all>全选当前</button>' +
+      '<button type="button" class="btn btn-sm" data-pick-none>清空</button>' +
+      '<span class="tpl-pick-count" id="tplPickCount">已选 0 项</span>' +
+    '</div>' +
+    '<div class="dialog-form-actions">' +
+      '<button type="button" class="btn" data-cancel>取消</button>' +
+      '<button type="submit" class="btn btn-primary" data-confirm disabled>添加所选</button>' +
+    '</div>';
+  body.appendChild(form);
+  var listBox = $('#tplPickList', form);
+  var statusSel = $('#tplPickStatus', form);
+  var queryInp = $('#tplPickQuery', form);
+  var countEl = $('#tplPickCount', form);
+  var confirmBtn = $('[data-confirm]', form);
+  var selected = {};
+  function candidates(){
+    var status = statusSel.value;
+    var q = queryInp.value.trim().toLowerCase();
+    return state.tasks.filter(function(t){
+      if(t.kind !== 'once' || t.archived) return false;
+      if(status === 'done' && !t.completedOn) return false;
+      if(status === 'pending' && t.completedOn) return false;
+      if(q && String(t.title || '').toLowerCase().indexOf(q) === -1) return false;
+      return true;
+    }).sort(function(a, b){
+      var ad = a.completedOn || '9999-99-99', bd = b.completedOn || '9999-99-99';
+      if(ad !== bd) return ad < bd ? 1 : -1;
+      var at = a.dueDate || '9999-99-99', bt = b.dueDate || '9999-99-99';
+      if(at !== bt) return at < bt ? -1 : 1;
+      return String(a.title || '').localeCompare(String(b.title || ''));
+    }).slice(0, 300);
+  }
+  function selectedTasks(){
+    var out = [];
+    state.tasks.forEach(function(t){ if(selected[t.id]) out.push(t); });
+    return out;
+  }
+  function syncCount(){
+    var n = selectedTasks().length;
+    countEl.textContent = '已选 ' + n + ' 项';
+    confirmBtn.disabled = n === 0;
+  }
+  function renderList(){
+    var list = candidates();
+    listBox.innerHTML = '';
+    if(!list.length){
+      listBox.innerHTML = '<div class="tpl-pick-empty">没有符合条件的任务。</div>';
+      syncCount();
+      return;
+    }
+    list.forEach(function(t){
+      var cat = categoryById(t.categoryId);
+      var subCount = Array.isArray(t.subtasks) ? t.subtasks.length : 0;
+      var row = el('<label class="tpl-pick-row">' +
+        '<input type="checkbox"' + (selected[t.id] ? ' checked' : '') + '>' +
+        '<span class="tpl-pick-main">' +
+          '<span class="tpl-pick-title">' + esc(t.title) + '</span>' +
+          '<span class="tpl-pick-meta">' +
+            '<span class="cal-cat"><i style="background:' + esc(cat.color) + '"></i>' + esc(cat.name) + '</span>' +
+            '<span>' + esc(taskPickStatusLabel(t)) + '</span>' +
+            (t.dueTime ? '<span>时间 ' + esc(t.dueTime) + '</span>' : '') +
+            (subCount ? '<span>小任务 ' + subCount + '</span>' : '') +
+          '</span>' +
+        '</span>' +
+      '</label>');
+      var cb = $('input', row);
+      cb.addEventListener('change', function(){
+        if(cb.checked) selected[t.id] = true; else delete selected[t.id];
+        syncCount();
+      });
+      listBox.appendChild(row);
+    });
+    syncCount();
+  }
+  statusSel.addEventListener('change', renderList);
+  queryInp.addEventListener('input', renderList);
+  $('[data-pick-all]', form).addEventListener('click', function(){
+    candidates().forEach(function(t){ selected[t.id] = true; });
+    renderList();
+  });
+  $('[data-pick-none]', form).addEventListener('click', function(){
+    selected = {};
+    renderList();
+  });
+  $$('[data-cancel]', form).forEach(function(b){ b.addEventListener('click', d.close); });
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var tasks = selectedTasks();
+    if(!tasks.length){ toast('请选择至少一个任务','error'); return; }
+    var items = templateItemsFromTasks(tasks, 500);
+    d.close();
+    onConfirm(items);
+  });
+  renderList();
+  setTimeout(function(){ if(queryInp) queryInp.focus(); }, 30);
+}
 function openTemplateManager(){
   var d = makeDialog('模板清单', '', '');
   var body = $('.modal-body', d.root);
@@ -3044,6 +3224,7 @@ function openTemplateManager(){
     '<div class="template-tools">' +
       '<button type="button" class="btn btn-primary" data-new>＋ 新建空白模板</button>' +
       '<button type="button" class="btn" data-from>从当前待办生成模板</button>' +
+      '<button type="button" class="btn" data-from-done>从已完成生成模板</button>' +
     '</div>'
   );
   body.appendChild(listBox);
@@ -3051,12 +3232,13 @@ function openTemplateManager(){
   body.appendChild(el('<p class="template-hint">把常做的一组任务保存成模板，之后一键生成到「今日清单」；模板会随数据备份与账号同步。</p>'));
   $('[data-new]', toolRow).addEventListener('click', function(){ d.close(); openTemplateEditor(null, []); });
   $('[data-from]', toolRow).addEventListener('click', function(){ d.close(); openTemplateEditor(null, pendingTemplateItems()); });
+  $('[data-from-done]', toolRow).addEventListener('click', function(){ d.close(); openTemplateEditor(null, completedTemplateItems()); });
 
   function renderRows(){
     listBox.innerHTML = '';
     var templates = state.templates || [];
     if(!templates.length){
-      listBox.innerHTML = '<div class="template-empty">还没有模板。新建空白模板，或把当前待办生成成模板。</div>';
+      listBox.innerHTML = '<div class="template-empty">还没有模板。新建空白模板，或把当前待办 / 已完成任务生成成模板。</div>';
       return;
     }
     templates.forEach(function(tpl){
@@ -3799,15 +3981,21 @@ function dailyProgressHTML(done, total){
 }
 function groupHTML(title, hint, count, itemsHtml, extraClass, footerHtml){
   if(!itemsHtml && !footerHtml) return '';
+  var open = !groupCollapsed[title];
   return '' +
     '<section class="section group' + (extraClass ? ' ' + extraClass : '') + '">' +
-      '<div class="section-head">' +
+      '<button type="button" class="group-toggle' + (open ? ' open' : '') + '" data-act="toggle-group" data-group="' + esc(title) + '" aria-expanded="' + (open ? 'true' : 'false') + '">' +
         '<span class="section-title">' + title + '</span>' +
         '<span class="count-pill">' + count + '</span>' +
-        (hint ? '<span class="section-hint">' + hint + '</span>' : '') +
-      '</div>' +
-      '<ul class="tasks">' + (itemsHtml || '') + '</ul>' +
-      (footerHtml || '') +
+        '<span class="group-tail">' +
+          (hint ? '<span class="section-hint">' + hint + '</span>' : '') +
+          '<span class="chev" aria-hidden="true">▾</span>' +
+        '</span>' +
+      '</button>' +
+      '<div class="collapse' + (open ? ' open' : '') + '" data-group-collapse="' + esc(title) + '"><div class="collapse-inner">' +
+        '<ul class="tasks">' + (itemsHtml || '') + '</ul>' +
+        (footerHtml || '') +
+      '</div></div>' +
     '</section>';
 }
 function renderToday(){
@@ -4422,6 +4610,18 @@ async function onAction(btn){
       doneOpen = true;
       renderToday();
       animateCollapseOpen($('.done-collapse'));
+    }
+    return;
+  }
+  if(act === 'toggle-group'){
+    var gkey = btn.getAttribute('data-group') || '';
+    if(groupCollapsed[gkey]){
+      groupCollapsed[gkey] = false;
+      renderToday();
+      animateCollapseOpen(groupCollapseEl(gkey));
+    }else{
+      groupCollapsed[gkey] = true;
+      collapseOut(groupCollapseEl(gkey), renderToday);
     }
     return;
   }
