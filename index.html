@@ -775,13 +775,6 @@ li.task:hover{background:#fafafa}
 }
 
 /* ---- 番茄钟 / 专注工具栏 ---- */
-.pomodoro-card{border-top:2px solid var(--ink);padding:0}
-.pomodoro-head{
-  display:flex;align-items:baseline;justify-content:space-between;
-  gap:12px;flex-wrap:wrap;padding:12px 14px;
-  border-bottom:1px solid var(--line-soft);
-}
-.pomodoro-title{font-size:11.5px;font-weight:700;letter-spacing:.2em;color:var(--ink);text-transform:uppercase}
 .pomodoro-today{font-size:11px;letter-spacing:.06em;color:#777;font-variant-numeric:tabular-nums}
 .pomodoro-body{
   display:grid;grid-template-columns:auto minmax(0,1fr) auto;
@@ -1289,6 +1282,121 @@ li.task:hover .task-actions,li.task:focus-within .task-actions{transform:none}
 .pomodoro-time.running{animation:fx-breathe 2.4s ease-in-out infinite}
 .pomodoro-time.pomo-done{animation:fx-pulse var(--anim-slow) var(--ease-out)}
 
+/* ---- 目标 / GOALS ---- */
+.goals-card{border-top:2px solid var(--ink);padding:16px 15px 14px}
+.goals-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.goals-title-wrap{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;min-width:0}
+.goals-title{font-size:12px;font-weight:700;letter-spacing:.2em;color:var(--ink);text-transform:uppercase}
+.goals-sub{font-size:11px;letter-spacing:.05em;color:#777}
+.goals-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.goals-filter{display:flex;border:1px solid var(--line)}
+.goal-filter{
+  border:0;border-right:1px solid var(--line);background:#fff;color:var(--ink-2);
+  padding:5px 10px;font-size:12px;letter-spacing:.05em;
+}
+.goal-filter:last-child{border-right:0}
+.goal-filter:hover{background:#f4f4f4}
+.goal-filter.active{background:var(--ink);color:#fff}
+.goal-list{display:grid;margin-top:13px;border:1px solid var(--line)}
+.goal-list:empty{display:none}
+.goal-card{
+  display:block;width:100%;text-align:left;cursor:pointer;
+  border:0;border-bottom:1px solid var(--line);background:#fff;color:var(--ink);
+  padding:12px 13px;font:inherit;
+}
+.goal-card:last-child{border-bottom:0}
+.goal-card:hover{background:#fafafa}
+.goal-card:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.goal-card-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;width:100%}
+.goal-name{font-size:14px;font-weight:650;letter-spacing:.02em;word-break:break-word}
+.goal-status{flex:none;font-size:10px;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--ink);padding:2px 7px;color:var(--ink)}
+.goal-status.achieved{background:var(--brand);border-color:var(--brand);color:#fff}
+.goal-status.ended{border-color:#9a9a9a;color:#777}
+.goal-period{margin-left:auto;font-size:11px;color:#777;font-variant-numeric:tabular-nums}
+.goal-track{display:block;width:100%;height:9px;border:1px solid var(--ink);background:#fff;margin-top:9px}
+.goal-fill{display:block;height:100%;background:var(--ink);transition:width var(--anim-slow) var(--ease-out)}
+.goal-card.achieved .goal-fill{background:var(--brand)}
+.goal-card.ended .goal-fill{background:#9a9a9a}
+.goal-card.ended .goal-track{border-color:#9a9a9a}
+.goal-meta{display:flex;gap:12px;flex-wrap:wrap;width:100%;margin-top:7px;font-size:11px;color:#777}
+.goal-meta strong{color:var(--ink);font-weight:650}
+.goal-hint{margin:12px 0 0;font-size:11px;line-height:1.8;color:#8a8a8a}
+.goal-empty{border:1px dashed #c6cede;padding:15px;font-size:12.5px;line-height:1.8;color:#8a8a8a;text-align:center}
+
+/* 目标编辑弹窗 */
+.goal-progress-line{
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  border:1px solid var(--line);border-left:3px solid var(--ink);background:#fafafa;
+  padding:9px 11px;font-size:12px;color:#555;
+}
+.goal-progress-line b{font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
+.goal-task-list{display:grid;gap:8px}
+.goal-task-row{border:1px solid var(--line);background:#fff;padding:9px 10px}
+.goal-task-head{display:flex;align-items:center;gap:8px}
+.goal-task-no{
+  flex:none;width:22px;height:22px;border:1px solid var(--line);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#5b6478;
+}
+.goal-task-title{flex:1;min-width:0;height:34px;border:1px solid #bdbdbd;background:#fff;padding:0 10px;font-size:13px;outline:none;font-family:inherit}
+.goal-task-title:focus{border-color:var(--ink);outline:1px solid var(--ink)}
+.goal-task-del{border:0;background:transparent;color:#8a8a8a;font-size:15px;line-height:1;padding:4px 6px}
+.goal-task-del:hover{color:var(--brand)}
+.goal-task-more{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:8px;padding-left:30px}
+.goal-task-more select{height:32px;border:1px solid #bdbdbd;background:#fff;padding:0 8px;font-size:12.5px;outline:none;font-family:inherit}
+.goal-task-more select:focus{border-color:var(--ink);outline:1px solid var(--ink)}
+.goal-days{display:flex;gap:4px;flex-wrap:wrap}
+.goal-day{border:1px solid var(--line);background:#fff;color:var(--ink-2);font-size:11.5px;padding:5px 8px}
+.goal-day:hover{border-color:var(--ink)}
+.goal-day.active{background:var(--ink);border-color:var(--ink);color:#fff}
+.goal-task-stat{font-size:11px;color:#777;font-variant-numeric:tabular-nums}
+.goal-task-stat b{color:var(--ink);font-weight:650}
+.goal-task-undo{border:0;background:transparent;color:var(--brand);font-size:11.5px;text-decoration:underline;padding:0}
+.goal-task-empty{border:1px dashed #c6cede;padding:11px;font-size:12px;color:#8a8a8a;text-align:center}
+
+/* ---- 工具浮窗 / FAB ---- */
+.tool-fab{position:fixed;right:22px;bottom:26px;z-index:55}
+.tool-fab-btn{
+  display:inline-flex;align-items:center;gap:9px;
+  border:1px solid var(--ink);background:#fff;color:var(--ink);
+  box-shadow:var(--shadow-lg);padding:10px 14px;font-size:13px;font-weight:600;letter-spacing:.06em;
+  touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;
+}
+.tool-fab-btn:hover{background:var(--ink);color:#fff}
+.tool-fab-btn.dragging{cursor:grabbing}
+.tool-fab-icon{font-size:15px;line-height:1}
+.tool-fab-text{display:inline-block;min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
+.tool-fab-btn.running{border-color:var(--brand);color:var(--brand)}
+.tool-fab-btn.running .tool-fab-icon{animation:fx-breathe 2.4s ease-in-out infinite}
+.tool-fab-btn.running:hover{background:var(--brand);border-color:var(--brand);color:#fff}
+.tool-fab-btn.pomo-flash{background:var(--brand);border-color:var(--brand);color:#fff;animation:fx-pulse var(--anim-slow) var(--ease-out)}
+.tool-panel{
+  position:absolute;right:0;bottom:calc(100% + 10px);
+  width:min(330px,calc(100vw - 36px));
+}
+.tool-panel-box{
+  background:#fff;border:1px solid var(--ink);border-top:3px solid var(--ink);
+}
+.tool-fab.panel-below .tool-panel{bottom:auto;top:calc(100% + 10px)}
+.tool-fab.panel-left .tool-panel{right:auto;left:0}
+.tool-panel-head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  padding:11px 13px;border-bottom:1px solid var(--line-soft);
+}
+.tool-panel-title{font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--ink);text-transform:uppercase}
+.tool-panel .pomodoro-body{grid-template-columns:1fr;justify-items:stretch;gap:12px;padding:13px}
+.tool-panel .pomodoro-modes{display:flex}
+.tool-panel .pomodoro-mode{flex:1;padding:8px 4px}
+.tool-panel .pomodoro-time{font-size:44px;text-align:center}
+.tool-panel .pomodoro-controls{display:flex}
+.tool-panel .pomodoro-controls .btn{flex:1}
+.tool-panel-note{border-top:1px solid var(--line-soft);padding:8px 13px;font-size:10.5px;letter-spacing:.04em;color:#8a8a8a}
+@media (max-width:640px){
+  .goals-card{padding:14px 12px 12px}
+  .goal-period{margin-left:0;width:100%}
+  .tool-panel{width:min(330px,calc(100vw - 24px))}
+}
+
 /* 降低动态效果 */
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{
@@ -1450,12 +1558,12 @@ li.task:hover .task-actions,li.task:focus-within .task-actions{transform:none}
           <div class="stat accent">
             <div class="label">今日已完成</div>
             <div class="num" id="statDone">0</div>
-            <div class="sub">含每日固定与一次性</div>
+            <div class="sub">含每日固定、一次性与目标</div>
           </div>
           <div class="stat">
             <div class="label">今日待办</div>
             <div class="num" id="statTodo">0</div>
-            <div class="sub">逾期 + 今日 + 无期限</div>
+            <div class="sub">逾期 + 今日 + 无期限 + 目标</div>
           </div>
           <div class="stat ok">
             <div class="label">今日完成率</div>
@@ -1468,6 +1576,25 @@ li.task:hover .task-actions,li.task:focus-within .task-actions{transform:none}
             <div class="sub">需要优先处理</div>
           </div>
         </div>
+      </section>
+      <section class="section goals-card" aria-label="目标进度">
+        <div class="goals-head">
+          <div class="goals-title-wrap">
+            <span class="goals-title">目标 · GOALS</span>
+            <span class="goals-sub" id="goalsSummary">进行中 0 个</span>
+          </div>
+          <div class="goals-tools">
+            <div class="goals-filter" role="group" aria-label="目标筛选">
+              <button type="button" class="goal-filter active" data-act="goal-filter" data-filter="active">进行中</button>
+              <button type="button" class="goal-filter" data-act="goal-filter" data-filter="achieved">已达成</button>
+              <button type="button" class="goal-filter" data-act="goal-filter" data-filter="ended">已结束</button>
+              <button type="button" class="goal-filter" data-act="goal-filter" data-filter="all">全部</button>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary" data-act="new-goal">＋ 新建目标</button>
+          </div>
+        </div>
+        <div class="goal-list" id="goalList"></div>
+        <p class="goal-hint">目标由一组可重复任务组成（每日，或每周指定几天）；到了周期内该做的日子，任务会自动出现在今日清单的「每日固定任务」里。完成次数累计到应完成次数即为达成，过后不再出现在今日清单。</p>
       </section>
       <section class="section calendar-card" aria-label="任务截止日历">
         <div class="calendar-head">
@@ -1494,24 +1621,6 @@ li.task:hover .task-actions,li.task:focus-within .task-actions{transform:none}
           <span>数字为该日到期的任务数</span>
         </div>
       </section>
-      <section class="section pomodoro-card" aria-label="专注工具栏">
-        <div class="pomodoro-head">
-          <span class="pomodoro-title">专注工具栏 · POMODORO</span>
-          <span class="pomodoro-today" id="pomodoroToday">今日 0 次 · 0 分钟</span>
-        </div>
-        <div class="pomodoro-body">
-          <div class="pomodoro-modes" role="group" aria-label="计时模式">
-            <button type="button" class="pomodoro-mode active" data-pomo-mode="work">专注 25</button>
-            <button type="button" class="pomodoro-mode" data-pomo-mode="break">短休 5</button>
-            <button type="button" class="pomodoro-mode" data-pomo-mode="long">长休 15</button>
-          </div>
-          <div class="pomodoro-time" id="pomodoroTime" role="timer" aria-live="off">25:00</div>
-          <div class="pomodoro-controls">
-            <button type="button" class="btn btn-primary" id="pomodoroToggle">开始</button>
-            <button type="button" class="btn" id="pomodoroReset">重置</button>
-          </div>
-        </div>
-      </section>
       <section class="section chart-card">
         <div class="chart-head">
           <span class="chart-title">近 30 天完成趋势</span>
@@ -1528,6 +1637,37 @@ li.task:hover .task-actions,li.task:focus-within .task-actions{transform:none}
   </footer>
 </div>
 
+<!-- 番茄钟浮窗（可拖拽，位置只存本机） -->
+<div class="tool-fab" id="toolFab">
+  <div class="tool-panel collapse" id="toolPanel" aria-hidden="true">
+    <div class="collapse-inner">
+      <div class="tool-panel-box">
+      <div class="tool-panel-head">
+        <span class="tool-panel-title">专注工具栏 · POMODORO</span>
+        <span class="pomodoro-today" id="pomodoroToday">今日 0 次 · 0 分钟</span>
+      </div>
+      <div class="pomodoro-body">
+        <div class="pomodoro-modes" role="group" aria-label="计时模式">
+          <button type="button" class="pomodoro-mode active" data-pomo-mode="work">专注 25</button>
+          <button type="button" class="pomodoro-mode" data-pomo-mode="break">短休 5</button>
+          <button type="button" class="pomodoro-mode" data-pomo-mode="long">长休 15</button>
+        </div>
+        <div class="pomodoro-time" id="pomodoroTime" role="timer" aria-live="off">25:00</div>
+        <div class="pomodoro-controls">
+          <button type="button" class="btn btn-primary" id="pomodoroToggle">开始</button>
+          <button type="button" class="btn" id="pomodoroReset">重置</button>
+        </div>
+      </div>
+      <div class="tool-panel-note">按住按钮拖动可换位置 · 位置只保存在本机</div>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="tool-fab-btn" id="toolFabBtn" aria-expanded="false" aria-controls="toolPanel" aria-label="番茄钟浮窗">
+    <span class="tool-fab-icon" id="toolFabIcon" aria-hidden="true">◷</span>
+    <span class="tool-fab-text" id="toolFabText">番茄钟</span>
+  </button>
+</div>
+
 <script async src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
@@ -1541,6 +1681,7 @@ var SYNC_META_KEY = 'taskbook.sync.v1';
 var BACKUP_KEY = 'taskbook.state.backup.v1';
 var REMINDER_SEEN_KEY = 'taskbook.reminders.v1';
 var POMODORO_KEY = 'taskbook.pomodoro.v1';
+var FAB_KEY = 'taskbook.fab.v1';
 
 /* Supabase 配置：在 supabase.com 新建项目后，把下面的网址和 anon key 填进来 */
 var SUPABASE_URL = 'https://oxrjimtywtyhkjrcrgmn.supabase.co';
@@ -1574,6 +1715,7 @@ var libQuery = '';
 var libCategory = 'all';
 var libStatus = 'all';
 var calendarMonth = '';
+var goalFilter = 'active';
 var flashTaskId = '';
 var animatingIds = {};
 var lastStatValues = {};
@@ -1781,10 +1923,12 @@ function stackToasts(){
 /* ---------- 默认状态与存储 ---------- */
 function defaultState(){
   return {
-    version: 1,
+    version: 2,
     categories: BUILTIN.map(function(c){ return { id:c.id, name:c.name, color:c.color }; }),
     tasks: [],
     dailyLogs: {},
+    goals: [],
+    goalLogs: {},
     templates: []
   };
 }
@@ -1870,6 +2014,72 @@ function normalizeState(raw){
     });
   }
   out.dailyLogs = logs;
+
+  var goals = [], goalSeen = {}, goalTaskSeen = {};
+  if (raw && Array.isArray(raw.goals)){
+    raw.goals.forEach(function(g){
+      if(!g || typeof g.id !== 'string' || !g.id || goalSeen[g.id]) return;
+      var gTitle = typeof g.title === 'string' ? g.title.trim().slice(0,30) : '';
+      if(!gTitle) return;
+      var gStart = isDateStr(g.startDate) ? g.startDate : dateKeyStr();
+      var gEnd = isDateStr(g.endDate) ? g.endDate : addDaysStr(gStart, 29);
+      if(gEnd < gStart) gEnd = gStart;
+      var gTasks = [], gTaskIds = {};
+      if (Array.isArray(g.tasks)){
+        g.tasks.forEach(function(t){
+          if(!t || typeof t.id !== 'string' || !t.id || gTaskIds[t.id] || goalTaskSeen[t.id]) return;
+          var tTitle = typeof t.title === 'string' ? t.title.trim().slice(0,60) : '';
+          if(!tTitle) return;
+          var repeat = t.repeat === 'weekly' ? 'weekly' : 'daily';
+          var days = [];
+          if (repeat === 'weekly' && Array.isArray(t.days)){
+            t.days.forEach(function(d){
+              var n = Number(d);
+              if(typeof d !== 'boolean' && d !== null && n >= 0 && n <= 6 && days.indexOf(n) === -1) days.push(n);
+            });
+            days.sort(function(a,b){ return a - b; });
+          }
+          if(repeat === 'weekly' && !days.length) repeat = 'daily';
+          gTaskIds[t.id] = true;
+          goalTaskSeen[t.id] = true;
+          gTasks.push({
+            id: t.id,
+            title: tTitle,
+            repeat: repeat,
+            days: days,
+            createdAt: isDateStr(t.createdAt) ? t.createdAt : gStart
+          });
+        });
+      }
+      if(!gTasks.length) return;
+      goalSeen[g.id] = true;
+      goals.push({
+        id: g.id,
+        title: gTitle,
+        startDate: gStart,
+        endDate: gEnd,
+        archived: g.archived === true,
+        createdAt: isDateStr(g.createdAt) ? g.createdAt : gStart,
+        tasks: gTasks
+      });
+    });
+  }
+  out.goals = goals;
+
+  var goalLogs = {};
+  if (raw && raw.goalLogs && typeof raw.goalLogs === 'object'){
+    Object.keys(raw.goalLogs).forEach(function(date){
+      if(!isDateStr(date)) return;
+      var inner = raw.goalLogs[date];
+      if(!inner || typeof inner !== 'object') return;
+      var row = {};
+      Object.keys(inner).forEach(function(id){
+        if(goalTaskSeen[id] && inner[id] === true) row[id] = true;
+      });
+      if(Object.keys(row).length) goalLogs[date] = row;
+    });
+  }
+  out.goalLogs = goalLogs;
 
   var templates = [];
   if (raw && Array.isArray(raw.templates)){
@@ -2470,7 +2680,146 @@ function countDoneOn(date){
   var row = state.dailyLogs[date] || {};
   Object.keys(row).forEach(function(id){ if(taskById(id)) n += 1; });
   state.tasks.forEach(function(t){ if(t.kind === 'once' && t.completedOn === date) n += 1; });
+  var goalRow = state.goalLogs[date] || {};
+  Object.keys(goalRow).forEach(function(id){ if(goalTaskById(id)) n += 1; });
   return n;
+}
+
+/* ---------- 目标 ---------- */
+var GOAL_WEEK_CN = ['日','一','二','三','四','五','六'];
+
+function goalById(id){
+  for(var i=0;i<state.goals.length;i++) if(state.goals[i].id === id) return state.goals[i];
+  return null;
+}
+function goalTaskById(id){
+  for(var i=0;i<state.goals.length;i++){
+    var tasks = state.goals[i].tasks;
+    for(var j=0;j<tasks.length;j++){
+      if(tasks[j].id === id) return { goal: state.goals[i], task: tasks[j] };
+    }
+  }
+  return null;
+}
+function goalTaskOccursOn(task, dateKey){
+  if(task.repeat !== 'weekly') return true;
+  var d = parseDate(dateKey);
+  if(!d) return false;
+  var days = Array.isArray(task.days) ? task.days : [];
+  return days.indexOf(d.getDay()) > -1;
+}
+function goalTaskExpectedCount(goal, task, untilDate){
+  var end = untilDate || goal.endDate;
+  if(!goal.startDate || !end || end < goal.startDate) return 0;
+  var n = 0, cur = goal.startDate, guard = 0;
+  while(cur && cur <= end && guard < 4000){
+    if(goalTaskOccursOn(task, cur)) n += 1;
+    cur = addDaysStr(cur, 1);
+    guard += 1;
+  }
+  return n;
+}
+function goalExpectedCount(goal, untilDate){
+  return goal.tasks.reduce(function(sum, t){ return sum + goalTaskExpectedCount(goal, t, untilDate); }, 0);
+}
+function goalTaskCompletedCount(goal, task){
+  var n = 0;
+  Object.keys(state.goalLogs).forEach(function(date){
+    if(date < goal.startDate || date > goal.endDate) return;
+    var row = state.goalLogs[date];
+    if(row && row[task.id]) n += 1;
+  });
+  return n;
+}
+function goalCompletedCount(goal){
+  return goal.tasks.reduce(function(sum, t){ return sum + goalTaskCompletedCount(goal, t); }, 0);
+}
+function goalStatusOf(goal){
+  var expected = goalExpectedCount(goal);
+  if(expected > 0 && goalCompletedCount(goal) >= expected) return 'achieved';
+  if(goal.archived || todayKey() > goal.endDate) return 'ended';
+  return 'active';
+}
+function goalProgress(goal){
+  var expected = goalExpectedCount(goal);
+  var done = goalCompletedCount(goal);
+  var pct = expected > 0 ? Math.min(100, Math.round(done / expected * 100)) : 0;
+  return {
+    expected: expected,
+    done: done,
+    pct: pct,
+    status: goalStatusOf(goal),
+    daysLeft: diffDays(todayKey(), goal.endDate)
+  };
+}
+function goalStatusLabel(status){
+  return status === 'achieved' ? '已达成' : (status === 'ended' ? '已结束' : '进行中');
+}
+function goalTasksForDate(date){
+  var out = [];
+  state.goals.forEach(function(goal){
+    if(goal.archived) return;
+    if(date < goal.startDate || date > goal.endDate) return;
+    goal.tasks.forEach(function(task){
+      if(goalTaskOccursOn(task, date)) out.push({ goal: goal, task: task });
+    });
+  });
+  return out;
+}
+/* 当天该出现的目标任务：pending 只在目标进行中时显示，done 用于今日已完成与统计口径 */
+function goalTodayItems(date){
+  var pending = [], done = [];
+  goalTasksForDate(date).forEach(function(item){
+    if(isGoalTaskDone(item.task.id, date)) done.push(item);
+    else if(goalStatusOf(item.goal) === 'active') pending.push(item);
+  });
+  return { pending: pending, done: done };
+}
+function logsForGoal(date){
+  if(!state.goalLogs[date]) state.goalLogs[date] = {};
+  return state.goalLogs[date];
+}
+function isGoalTaskDone(id, date){
+  var row = state.goalLogs[date];
+  return !!(row && row[id]);
+}
+function toggleGoalTaskLog(id){
+  var row = logsForGoal(todayKey());
+  if(row[id]) delete row[id];
+  else row[id] = true;
+  if(!Object.keys(row).length) delete state.goalLogs[todayKey()];
+}
+function goalTaskLastDoneDate(goal, task){
+  var last = '';
+  Object.keys(state.goalLogs).forEach(function(date){
+    if(date < goal.startDate || date > goal.endDate) return;
+    var row = state.goalLogs[date];
+    if(row && row[task.id] && date > last) last = date;
+  });
+  return last;
+}
+function undoGoalTaskLastLog(goal, task){
+  var last = goalTaskLastDoneDate(goal, task);
+  if(!last) return false;
+  delete state.goalLogs[last][task.id];
+  if(!Object.keys(state.goalLogs[last]).length) delete state.goalLogs[last];
+  return true;
+}
+function deleteGoalTaskLogs(taskId){
+  Object.keys(state.goalLogs).forEach(function(date){
+    var row = state.goalLogs[date];
+    if(row && row[taskId]) delete row[taskId];
+    if(row && !Object.keys(row).length) delete state.goalLogs[date];
+  });
+}
+function deleteGoalLogsFor(goal){
+  goal.tasks.forEach(function(t){ deleteGoalTaskLogs(t.id); });
+}
+function goalTaskRepeatLabel(task){
+  if(task.repeat !== 'weekly') return '每日';
+  var days = Array.isArray(task.days) ? task.days.slice().sort(function(a,b){ return a-b; }) : [];
+  if(!days.length) return '每日';
+  return '每周' + days.map(function(d){ return GOAL_WEEK_CN[d]; }).join('、');
 }
 
 /* ---------- 弹窗 ---------- */
@@ -2598,11 +2947,27 @@ function openManual(){
         '<li>在「管理 → 模板清单」中可以把常用的一组任务保存成模板：每项任务都能单独设置小任务、具体时间与备注，添加后也可随时删除；还能用「从已有任务添加」直接从待办或<strong>已完成任务</strong>里挑选，或用「从已完成生成模板」一键建模板。下次在新增栏点「模板」即可生成到今日清单。</li>' +
       '</ul>' +
 
-      '<h4>六、数据、同步与统计</h4>' +
+      '<h4>六、目标（统计页）</h4>' +
+      '<ul>' +
+        '<li>在「统计 → 目标」点「＋ 新建目标」，填写目标名称与起止日期，再添加若干任务；每条任务可选<strong>每日重复</strong>或<strong>每周指定几天</strong>。</li>' +
+        '<li>到了该做的日子，目标任务会自动出现在「今日清单」的<strong>每日固定任务</strong>里，勾选一次就是完成一次；完成次数累计到应完成次数（按周期与重复规则自动推算）即视为达成。</li>' +
+        '<li>提前达成会自动停止并盖上「已达成」，目标任务不再出现在今日清单；过了结束日期会自动转为「已结束」，完成率仍保留在统计页。也可以在目标详情里手动「结束目标」或「删除目标」。</li>' +
+        '<li>勾错了不要紧：打开目标详情，对某条任务点「撤销最近一次」即可回退最近一次打卡。</li>' +
+        '<li>目标任务的完成会计入今日完成数、今日完成率与近 30 天趋势，但不进入任务库和截止日历。</li>' +
+      '</ul>' +
+
+      '<h4>七、专注浮窗（番茄钟）</h4>' +
+      '<ul>' +
+        '<li>右下角的浮窗按钮就是番茄钟：点击展开或收起，按住按钮拖动可以换位置（位置只保存在这台电脑上）。</li>' +
+        '<li>收起时按钮会显示剩余时间，运行中的计时器即使收起面板也照常走；专注结束会弹出提示并发送系统通知。</li>' +
+        '<li>一张番茄按「专注 25 / 短休 5 / 长休 15」切换，完成一次专注会记进今日次数与分钟数；刷新页面会回到未开始状态。</li>' +
+      '</ul>' +
+
+      '<h4>八、数据、同步与统计</h4>' +
       '<ul>' +
         '<li>未登录时，任务数据只保存在当前浏览器中；登录账号后可跨设备同步，仍建议定期导出 JSON 备份。</li>' +
         '<li>导入备份会<strong>整体替换</strong>当前数据；删除可撤销，清空仍不可恢复，操作前请确认。</li>' +
-        '<li>「统计」页可查看今日完成情况、逾期数量、任务截止日历以及近 30 天完成趋势。</li>' +
+        '<li>「统计」页可查看今日完成情况、逾期数量、目标进度、任务截止日历以及近 30 天完成趋势。</li>' +
       '</ul>' +
 
       '<div class="manual-note">注意事项：不同网址（本地文件 / 线上网址）的数据是分开存储的；更换浏览器或清理站点数据前，请先在「数据管理」中导出备份。</div>' +
@@ -3967,6 +4332,23 @@ function taskItemHTML(t, extra){
       (noteOpen[t.id] ? '<div class="collapse open task-collapse"><div class="collapse-inner">' + notePanelHTML(t) + '</div></div>' : '') +
     '</li>';
 }
+function goalTaskItemHTML(item, done){
+  var goal = item.goal, task = item.task;
+  return '' +
+    '<li class="task goal-task' + (done ? ' done' : '') + '" data-id="' + esc(task.id) + '" data-goal="' + esc(goal.id) + '">' +
+      '<button type="button" class="task-check' + (done ? ' done' : '') + '" data-act="toggle-goal-task" data-id="' + esc(task.id) + '" aria-label="' + (done ? '撤销完成' : '标记完成') + '"></button>' +
+      '<div class="task-main">' +
+        '<div class="task-title">' + esc(task.title) + '</div>' +
+        '<div class="task-meta">' +
+          '<span class="chip" style="--chip:#111111"><i></i>目标 · ' + esc(goal.title) + '</span>' +
+          '<span class="due-label">' + esc(goalTaskRepeatLabel(task)) + (done ? ' · 已完成' : '') + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="task-actions">' +
+        '<button type="button" class="link-btn" data-act="open-goal" data-id="' + esc(goal.id) + '">目标详情</button>' +
+      '</div>' +
+    '</li>';
+}
 function dailyProgressHTML(done, total){
   var pct = total > 0 ? Math.round(done / total * 100) : 0;
   return '<div class="daily-progress">' +
@@ -4022,6 +4404,9 @@ function renderToday(){
     if(doneDailyIds[task.id]) return;
     pendingDaily.push(task);
   });
+  var goalToday = goalTodayItems(t);
+  var goalItems = goalToday.pending.concat(goalToday.done);
+  var goalPending = goalToday.pending, goalDone = goalToday.done;
   overdue.sort(taskCompare);
   dueToday.sort(taskCompare);
   backlog.sort(taskCompare);
@@ -4031,8 +4416,8 @@ function renderToday(){
   var doneTodayDaily = dailyAll.filter(function(x){ return doneDailyIds[x.id]; });
   var doneList = doneTodayOnce.concat(doneTodayDaily);
 
-  var pendingVisibleCount = overdue.length + dueToday.length + backlog.length + pendingDaily.length;
-  var doneCount = doneList.length;
+  var pendingVisibleCount = overdue.length + dueToday.length + backlog.length + pendingDaily.length + goalPending.length;
+  var doneCount = doneList.length + goalDone.length;
   var total = pendingVisibleCount + doneCount;
 
   var heroDone = $('#heroDone');
@@ -4041,7 +4426,7 @@ function renderToday(){
   if(heroTotal) heroTotal.textContent = total;
 
   var groups = '';
-  if(!state.tasks.length){
+  if(!state.tasks.length && !state.goals.length){
     groups = '<div class="empty"><div class="big">✓</div><p>还没有任务</p><p>点上方「新增任务」展开，输入第一项待办</p></div>';
   }else{
     groups += groupHTML('逾期待办', overdue.length ? '之前没做完的，先处理这些' : '', overdue.length,
@@ -4050,33 +4435,34 @@ function renderToday(){
       dueToday.map(function(x){ return taskItemHTML(x); }).join(''));
     groups += groupHTML('无期限待办', '没有截止日，会一直保留', backlog.length,
       backlog.map(function(x){ return taskItemHTML(x); }).join(''));
-    var dailyTotal = dailyAll.length;
-    var dailyDone = doneTodayDaily.length;
+    var dailyTotal = dailyAll.length + goalItems.length;
+    var dailyDone = doneTodayDaily.length + goalDone.length;
     if(dailyTotal > 0){
       groups += groupHTML('每日固定任务', '每天一轮，次日重置', dailyTotal,
-        pendingDaily.map(function(x){ return taskItemHTML(x); }).join(''),
+        pendingDaily.map(function(x){ return taskItemHTML(x); }).join('') +
+        goalPending.map(function(x){ return goalTaskItemHTML(x, false); }).join(''),
         '', dailyProgressHTML(dailyDone, dailyTotal));
     }
-    var allPendingEmpty = !overdue.length && !dueToday.length && !backlog.length && !pendingDaily.length;
+    var allPendingEmpty = !overdue.length && !dueToday.length && !backlog.length && !pendingDaily.length && !goalPending.length;
     if(allPendingEmpty){
-      if(doneList.length){
+      if(doneCount){
         groups = '<div class="empty"><div class="big">✓</div><p>今天的任务全部完成了</p><p>在下方展开「今日已完成」可以撤销误勾</p></div>' + groups;
       }else{
         groups = '<div class="empty"><div class="big">🗓</div><p>今天没有到期或固定的任务</p><p>未来安排的任务会在到期当天自动出现在这里</p></div>';
       }
     }
   }
-  if(doneList.length){
+  if(doneCount){
     groups += '<section class="section">' +
       '<button type="button" class="done-toggle' + (doneOpen ? ' open' : '') + '" data-act="toggle-done" aria-expanded="' + (doneOpen ? 'true' : 'false') + '">' +
         '<span class="task-check done" style="pointer-events:none;width:20px;height:20px"></span>' +
         '<span style="font-weight:600;font-size:13.5px">今日已完成</span>' +
-        '<span class="count-pill">' + doneList.length + '</span>' +
+        '<span class="count-pill">' + doneCount + '</span>' +
         '<span class="chev" aria-hidden="true">▾</span>' +
       '</button>' +
       (doneOpen ? '<div class="collapse open done-collapse"><div class="collapse-inner"><ul class="tasks">' + doneList.map(function(x){
         return taskItemHTML(x, { ok:true, label: x.kind==='daily' ? '每日任务 · 已完成' : '已完成' });
-      }).join('') + '</ul></div></div>' : '') +
+      }).join('') + goalDone.map(function(x){ return goalTaskItemHTML(x, true); }).join('') + '</ul></div></div>' : '') +
     '</section>';
   }
   $('#todayGroups').innerHTML = groups;
@@ -4177,6 +4563,9 @@ function todayStats(){
   var overdue = once.filter(function(x){ return !x.completedOn && x.dueDate !== null && x.dueDate < t; }).length;
   var done = doneDaily + doneOnce;
   var pendingDaily = dailyAll.length - doneDaily;
+  var goalToday = goalTodayItems(t);
+  done += goalToday.done.length;
+  pendingDaily += goalToday.pending.length;
   var total = done + pendingOnce + pendingDaily;
   return { done:done, pendingOnce:pendingOnce, pendingDaily:pendingDaily, total:total, overdue:overdue };
 }
@@ -4191,6 +4580,7 @@ function renderStats(animate){
     $('#statRate').textContent = '–';
   }
   animateNumber($('#statOverdue'), s.overdue, '', 'overdue');
+  renderGoals();
   renderCalendar(animate ? 'stagger' : undefined);
   renderChart();
 }
@@ -4393,6 +4783,341 @@ function renderChart(){
   wrap.innerHTML = svg;
 }
 
+/* ---------- 渲染：目标 ---------- */
+function goalMatchesFilter(goal, filter){
+  if(filter === 'all') return true;
+  return goalStatusOf(goal) === filter;
+}
+function goalCardHTML(goal){
+  var p = goalProgress(goal);
+  var leftText = p.daysLeft > 0 ? ('剩 ' + p.daysLeft + ' 天') : (p.daysLeft === 0 ? '今天结束' : '已过 ' + Math.abs(p.daysLeft) + ' 天');
+  return '' +
+    '<button type="button" class="goal-card ' + p.status + '" data-act="open-goal" data-id="' + esc(goal.id) + '">' +
+      '<span class="goal-card-top">' +
+        '<span class="goal-name">' + esc(goal.title) + '</span>' +
+        '<span class="goal-status ' + p.status + '">' + goalStatusLabel(p.status) + '</span>' +
+        '<span class="goal-period">' + esc(fmtShort(goal.startDate)) + ' → ' + esc(fmtShort(goal.endDate)) + '</span>' +
+      '</span>' +
+      '<span class="goal-track"><span class="goal-fill" style="width:' + p.pct + '%"></span></span>' +
+      '<span class="goal-meta">' +
+        '<span>已完成 <strong>' + p.done + '</strong> / 应完成 <strong>' + p.expected + '</strong> 次</span>' +
+        '<span><strong>' + p.pct + '%</strong></span>' +
+        '<span>' + goal.tasks.length + ' 个任务</span>' +
+        '<span>' + esc(leftText) + '</span>' +
+      '</span>' +
+    '</button>';
+}
+function renderGoals(){
+  var list = $('#goalList');
+  if(!list) return;
+  var counts = { active:0, achieved:0, ended:0 };
+  state.goals.forEach(function(g){ counts[goalStatusOf(g)] += 1; });
+  var rank = { active:0, achieved:1, ended:2 };
+  var shown = state.goals.filter(function(g){ return goalMatchesFilter(g, goalFilter); });
+  shown.sort(function(a, b){
+    var ra = rank[goalStatusOf(a)], rb = rank[goalStatusOf(b)];
+    if(ra !== rb) return ra - rb;
+    if(a.endDate !== b.endDate) return a.endDate < b.endDate ? -1 : 1;
+    return String(a.createdAt || '') < String(b.createdAt || '') ? -1 : 1;
+  });
+  if(!shown.length){
+    list.innerHTML = '<div class="goal-empty">' + (state.goals.length
+      ? '这个筛选下暂时没有目标。'
+      : '还没有目标。点「＋ 新建目标」设定一个周期目标，比如「早起计划」：每天 7:00 前起床，持续 21 天。') + '</div>';
+  }else{
+    list.innerHTML = shown.map(goalCardHTML).join('');
+  }
+  var summary = $('#goalsSummary');
+  if(summary){
+    var parts = [];
+    if(counts.active) parts.push('进行中 ' + counts.active);
+    if(counts.achieved) parts.push('已达成 ' + counts.achieved);
+    if(counts.ended) parts.push('已结束 ' + counts.ended);
+    summary.textContent = parts.length ? parts.join(' · ') : '还没有目标';
+  }
+  $$('.goal-filter').forEach(function(btn){
+    btn.classList.toggle('active', btn.getAttribute('data-filter') === goalFilter);
+  });
+}
+
+/* ---------- 目标编辑弹窗 ---------- */
+function goalDayButtonsHTML(task){
+  var order = [1,2,3,4,5,6,0];
+  return order.map(function(d){
+    var on = (task.days || []).indexOf(d) > -1;
+    return '<button type="button" class="goal-day' + (on ? ' active' : '') + '" data-day="' + d + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + GOAL_WEEK_CN[d] + '</button>';
+  }).join('');
+}
+function openGoalEditor(goal){
+  var isEdit = !!goal;
+  var d = makeDialog(isEdit ? '目标详情' : '新建目标', '', '');
+  var body = $('.modal-body', d.root);
+  var form = el('<form class="dialog-form" autocomplete="off"></form>');
+  var draft = goal
+    ? goal.tasks.map(function(t){ return { id:t.id, title:t.title, repeat:t.repeat, days:(t.days || []).slice(), createdAt:t.createdAt }; })
+    : [{ id: uid('gt_'), title:'', repeat:'daily', days:[], createdAt: todayKey() }];
+
+  form.innerHTML =
+    (isEdit ? '<div class="goal-progress-line" id="goalProgressLine"></div>' : '') +
+    '<div class="field"><span>目标名称</span><input id="gfTitle" type="text" maxlength="30" placeholder="例如：早起计划 / 21 天背单词" value="' + esc(goal ? goal.title : '') + '"></div>' +
+    '<div class="field-grid">' +
+      '<div class="field"><span>开始日期</span><input id="gfStart" type="date" value="' + esc(goal ? goal.startDate : todayKey()) + '"></div>' +
+      '<div class="field"><span>结束日期</span><input id="gfEnd" type="date" value="' + esc(goal ? goal.endDate : addDaysStr(todayKey(), 29)) + '"></div>' +
+    '</div>' +
+    '<div class="field"><span>目标任务（可设每日或每周指定几天）</span>' +
+      '<div class="goal-task-list" id="gfTasks"></div>' +
+      '<div class="dialog-form-sub"><button type="button" class="btn btn-sm" id="gfAddTask">＋ 添加任务</button></div>' +
+    '</div>' +
+    '<div class="modal-foot" style="padding:14px 0 0;background:transparent;border-top:0">' +
+      (isEdit ? '<button type="button" class="btn btn-danger" id="gfDelete">删除目标</button>' : '') +
+      (isEdit && goalStatusOf(goal) === 'active' ? '<button type="button" class="btn" id="gfEnd">结束目标</button>' : '') +
+      '<button type="button" class="btn" data-close>取消</button>' +
+      '<button type="submit" class="btn btn-primary">' + (isEdit ? '保存修改' : '创建目标') + '</button>' +
+    '</div>';
+  body.appendChild(form);
+  $('.modal-x', d.root).addEventListener('click', d.close);
+  $$('[data-close]', form).forEach(function(b){ b.addEventListener('click', d.close); });
+
+  var titleInput = $('#gfTitle', form);
+  var startInput = $('#gfStart', form);
+  var endInput = $('#gfEnd', form);
+  var listBox = $('#gfTasks', form);
+
+  function savedTaskFor(id){
+    if(!goal) return null;
+    for(var i=0;i<goal.tasks.length;i++) if(goal.tasks[i].id === id) return goal.tasks[i];
+    return null;
+  }
+  function draftGoal(){
+    return { startDate: startInput.value, endDate: endInput.value, tasks: draft };
+  }
+  function taskStatHTML(t){
+    var saved = savedTaskFor(t.id);
+    if(!saved) return '';
+    var tmp = draftGoal();
+    var doneN = goalTaskCompletedCount(tmp, saved);
+    var expN = goalTaskExpectedCount(tmp, saved);
+    return '<span class="goal-task-stat">已完成 <b>' + doneN + '</b> / 应完成 <b>' + expN + '</b> 次</span>' +
+      (doneN ? '<button type="button" class="goal-task-undo" data-undo="' + esc(t.id) + '">撤销最近一次</button>' : '');
+  }
+  function rowHTML(t, idx){
+    var isWeekly = t.repeat === 'weekly';
+    return '<div class="goal-task-row" data-row="' + esc(t.id) + '">' +
+      '<div class="goal-task-head">' +
+        '<span class="goal-task-no">' + (idx + 1) + '</span>' +
+        '<input type="text" class="goal-task-title" maxlength="60" placeholder="任务内容，例如：7:00 前起床" value="' + esc(t.title) + '">' +
+        '<button type="button" class="goal-task-del" data-del="' + esc(t.id) + '" aria-label="删除这条任务">×</button>' +
+      '</div>' +
+      '<div class="goal-task-more">' +
+        '<select data-repeat="' + esc(t.id) + '" aria-label="重复方式">' +
+          '<option value="daily"' + (isWeekly ? '' : ' selected') + '>每日重复</option>' +
+          '<option value="weekly"' + (isWeekly ? ' selected' : '') + '>每周指定几天</option>' +
+        '</select>' +
+        '<div class="goal-days' + (isWeekly ? '' : ' hidden') + '" data-days="' + esc(t.id) + '">' + goalDayButtonsHTML(t) + '</div>' +
+        '<span class="goal-task-stat-wrap" data-stat="' + esc(t.id) + '">' + taskStatHTML(t) + '</span>' +
+      '</div>' +
+    '</div>';
+  }
+  function renderTaskList(focusId){
+    listBox.innerHTML = draft.map(rowHTML).join('');
+    if(focusId){
+      var row = listBox.querySelector('[data-row="' + focusId + '"] .goal-task-title');
+      if(row) row.focus();
+    }
+  }
+  function syncProgress(){
+    var line = $('#goalProgressLine', form);
+    if(!line) return;
+    var tmp = draftGoal();
+    var exp = goalExpectedCount(tmp);
+    var done = tmp.tasks.reduce(function(sum, t){ return sum + goalTaskCompletedCount(tmp, t); }, 0);
+    if(!isEdit){
+      line.textContent = '';
+      return;
+    }
+    var pct = exp > 0 ? Math.min(100, Math.round(done / exp * 100)) : 0;
+    line.innerHTML = '<span>完成 <b>' + done + '</b> / ' + exp + ' 次（' + pct + '%）</span>' +
+      '<span class="goal-status ' + goalStatusOf(goal) + '">' + goalStatusLabel(goalStatusOf(goal)) + '</span>';
+  }
+  function updateStats(){
+    draft.forEach(function(t){
+      var box = listBox.querySelector('[data-stat="' + t.id + '"]');
+      if(box) box.innerHTML = taskStatHTML(t);
+    });
+    syncProgress();
+  }
+  function draftTask(id){
+    for(var i=0;i<draft.length;i++) if(draft[i].id === id) return draft[i];
+    return null;
+  }
+
+  listBox.addEventListener('input', function(e){
+    var row = e.target.closest ? e.target.closest('[data-row]') : null;
+    if(!row) return;
+    var t = draftTask(row.getAttribute('data-row'));
+    if(t && e.target.classList.contains('goal-task-title')) t.title = e.target.value;
+  });
+  listBox.addEventListener('change', function(e){
+    var id = e.target.getAttribute ? e.target.getAttribute('data-repeat') : null;
+    if(!id) return;
+    var t = draftTask(id);
+    if(!t) return;
+    t.repeat = e.target.value === 'weekly' ? 'weekly' : 'daily';
+    var days = listBox.querySelector('[data-days="' + id + '"]');
+    if(days) days.classList.toggle('hidden', t.repeat !== 'weekly');
+    updateStats();
+  });
+  listBox.addEventListener('click', function(e){
+    var target = e.target;
+    var dayBtn = target.closest ? target.closest('[data-day]') : null;
+    if(dayBtn){
+      var row = dayBtn.closest('[data-row]');
+      var t = row ? draftTask(row.getAttribute('data-row')) : null;
+      if(t){
+        var day = Number(dayBtn.getAttribute('data-day'));
+        var idx = t.days.indexOf(day);
+        if(idx > -1) t.days.splice(idx, 1);
+        else t.days.push(day);
+        t.days.sort(function(a,b){ return a - b; });
+        dayBtn.classList.toggle('active', t.days.indexOf(day) > -1);
+        dayBtn.setAttribute('aria-pressed', t.days.indexOf(day) > -1 ? 'true' : 'false');
+        updateStats();
+      }
+      return;
+    }
+    var delBtn = target.closest ? target.closest('[data-del]') : null;
+    if(delBtn){
+      var delId = delBtn.getAttribute('data-del');
+      if(draft.length <= 1){
+        toast('目标至少要保留一条任务','error');
+        return;
+      }
+      draft = draft.filter(function(t){ return t.id !== delId; });
+      renderTaskList();
+      updateStats();
+      return;
+    }
+    var undoBtn = target.closest ? target.closest('[data-undo]') : null;
+    if(undoBtn && goal){
+      var saved = savedTaskFor(undoBtn.getAttribute('data-undo'));
+      if(saved && undoGoalTaskLastLog(goal, saved)){
+        save();
+        updateStats();
+        rerender();
+        toast('已撤销最近一次打卡','ok');
+      }
+      return;
+    }
+  });
+  $('#gfAddTask', form).addEventListener('click', function(){
+    var t = { id: uid('gt_'), title:'', repeat:'daily', days:[], createdAt: todayKey() };
+    draft.push(t);
+    renderTaskList(t.id);
+    updateStats();
+  });
+  startInput.addEventListener('change', updateStats);
+  endInput.addEventListener('change', updateStats);
+
+  if(isEdit){
+    var delGoalBtn = $('#gfDelete', form);
+    if(delGoalBtn) delGoalBtn.addEventListener('click', async function(){
+      var ok = await confirmDialog({
+        title:'删除目标',
+        message:'确定删除目标「<strong>' + esc(goal.title) + '</strong>」？目标里的任务与其历史打卡记录都会移除。',
+        okText:'删除',
+        danger:true
+      });
+      if(!ok) return;
+      deleteGoalLogsFor(goal);
+      state.goals = state.goals.filter(function(g){ return g.id !== goal.id; });
+      save();
+      d.close();
+      rerender();
+      toast('目标已删除');
+    });
+    var endGoalBtn = $('#gfEnd', form);
+    if(endGoalBtn) endGoalBtn.addEventListener('click', async function(){
+      var ok = await confirmDialog({
+        title:'结束目标',
+        message:'结束「<strong>' + esc(goal.title) + '</strong>」后，它的任务不再出现在今日清单，已完成的记录会保留。',
+        okText:'结束'
+      });
+      if(!ok) return;
+      goal.archived = true;
+      save();
+      d.close();
+      rerender();
+      toast('目标已结束');
+    });
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var title = titleInput.value.trim();
+    if(!title){ toast('请输入目标名称','error'); titleInput.focus(); return; }
+    var s = startInput.value, en = endInput.value;
+    if(!isDateStr(s) || !isDateStr(en)){ toast('请选择完整的起止日期','error'); return; }
+    if(en < s){ toast('结束日期不能早于开始日期','error'); endInput.focus(); return; }
+    var tasks = [], badRow = null;
+    draft.forEach(function(t){
+      var tTitle = String(t.title || '').trim();
+      if(!tTitle){
+        if(!badRow) badRow = t.id;
+        return;
+      }
+      var days = (t.days || []).slice().filter(function(n){ return n >= 0 && n <= 6; });
+      days.sort(function(a,b){ return a - b; });
+      if(t.repeat === 'weekly' && !days.length){
+        if(!badRow) badRow = t.id;
+        return;
+      }
+      tasks.push({
+        id: t.id,
+        title: tTitle.slice(0,60),
+        repeat: t.repeat === 'weekly' ? 'weekly' : 'daily',
+        days: t.repeat === 'weekly' ? days : [],
+        createdAt: t.createdAt || todayKey()
+      });
+    });
+    if(!tasks.length || badRow){
+      toast('目标里每条任务都要填标题；每周重复的任务至少要选一天','error');
+      var badInput = badRow ? listBox.querySelector('[data-row="' + badRow + '"] .goal-task-title') : null;
+      if(badInput) badInput.focus();
+      return;
+    }
+    var keepIds = {};
+    tasks.forEach(function(t){ keepIds[t.id] = true; });
+    if(isEdit){
+      goal.tasks.forEach(function(t){ if(!keepIds[t.id]) deleteGoalTaskLogs(t.id); });
+      goal.title = title.slice(0,30);
+      goal.startDate = s;
+      goal.endDate = en;
+      goal.tasks = tasks;
+      save();
+      d.close();
+      rerender();
+      toast('目标已更新','ok');
+    }else{
+      state.goals.push({
+        id: uid('g_'),
+        title: title.slice(0,30),
+        startDate: s,
+        endDate: en,
+        archived: false,
+        createdAt: todayKey(),
+        tasks: tasks
+      });
+      save();
+      d.close();
+      rerender();
+      toast('目标已创建，任务会按周期出现在今日清单','ok');
+    }
+  });
+
+  renderTaskList();
+  syncProgress();
+}
+
 /* ---------- 番茄钟 / 专注工具栏 ---------- */
 function pomoDuration(mode){
   return mode === 'break' ? 5*60 : (mode === 'long' ? 15*60 : 25*60);
@@ -4428,6 +5153,27 @@ function pomoRender(){
   var d = rec.days && rec.days[todayKey()] ? rec.days[todayKey()] : { sessions:0, minutes:0 };
   var todayEl = $('#pomodoroToday');
   if(todayEl) todayEl.textContent = '今日 ' + (d.sessions||0) + ' 次 · ' + (d.minutes||0) + ' 分钟';
+  pomoRenderFab();
+}
+/* 收起态浮窗按钮：显示剩余倒计时 */
+function pomoRenderFab(){
+  var btn = $('#toolFabBtn'), text = $('#toolFabText'), icon = $('#toolFabIcon');
+  if(!btn || !text) return;
+  var running = pomo.running;
+  var paused = !running && pomo.remaining < pomo.total;
+  var label = running ? pomoFormat(pomoRemainingNow()) : (paused ? pomoFormat(pomo.remaining) : '番茄钟');
+  if(text.textContent !== label) text.textContent = label;
+  btn.classList.toggle('running', running);
+  if(icon) icon.textContent = paused ? '❙❙' : '◷';
+  btn.setAttribute('aria-label', running
+    ? '番茄钟计时中，剩余 ' + label
+    : (paused ? '番茄钟已暂停，剩余 ' + label : '番茄钟浮窗'));
+}
+function pomoFlashFab(){
+  var btn = $('#toolFabBtn');
+  if(!btn || prefersReducedMotion()) return;
+  btn.classList.add('pomo-flash');
+  setTimeout(function(){ btn.classList.remove('pomo-flash'); }, 700);
 }
 function pomoTick(){
   if(!pomo.running) return;
@@ -4461,6 +5207,7 @@ function pomoComplete(){
   pomo.remaining = pomo.total;
   pomo.endAt = 0;
   pomoRender();
+  pomoFlashFab();
   var doneTime = $('#pomodoroTime');
   if(doneTime && !prefersReducedMotion()){
     doneTime.classList.add('pomo-done');
@@ -4511,6 +5258,119 @@ function initPomodoro(){
   });
   setInterval(pomoTick, 500);
   pomoRender();
+}
+
+/* ---------- 工具浮窗（可拖拽） ---------- */
+function fabLoadPos(){
+  var raw = readLocal(FAB_KEY);
+  if(!raw) return null;
+  try{
+    var p = JSON.parse(raw);
+    if(p && typeof p.x === 'number' && typeof p.y === 'number' && isFinite(p.x) && isFinite(p.y)) return p;
+  }catch(err){}
+  return null;
+}
+function fabDefaultPos(btn){
+  var w = btn.offsetWidth || 132, h = btn.offsetHeight || 40;
+  var narrow = window.innerWidth <= 640;
+  return {
+    x: Math.max(10, window.innerWidth - w - 22),
+    y: Math.max(10, window.innerHeight - h - (narrow ? 96 : 26))
+  };
+}
+function fabApplyPos(fab, pos){
+  var w = fab.offsetWidth || 40, h = fab.offsetHeight || 40;
+  var maxX = Math.max(8, window.innerWidth - w - 8);
+  var maxY = Math.max(8, window.innerHeight - h - 8);
+  var x = Math.min(Math.max(8, Math.round(pos.x)), maxX);
+  var y = Math.min(Math.max(8, Math.round(pos.y)), maxY);
+  fab.style.left = x + 'px';
+  fab.style.top = y + 'px';
+  fab.style.right = 'auto';
+  fab.style.bottom = 'auto';
+  return { x: x, y: y };
+}
+function fabAdjustPanel(){
+  var fab = $('#toolFab'), btn = $('#toolFabBtn'), panel = $('#toolPanel');
+  if(!fab || !btn || !panel) return;
+  var box = panel.querySelector('.tool-panel-box');
+  var panelH = (box && box.offsetHeight) || 300;
+  var panelW = panel.offsetWidth || Math.min(330, window.innerWidth - 36);
+  var rect = btn.getBoundingClientRect();
+  fab.classList.toggle('panel-below', rect.top - panelH - 20 < 8 && (window.innerHeight - rect.bottom) > rect.top);
+  fab.classList.toggle('panel-left', rect.right - panelW < 8);
+}
+function initToolFab(){
+  var fab = $('#toolFab'), btn = $('#toolFabBtn'), panel = $('#toolPanel');
+  if(!fab || !btn || !panel) return;
+  var hasCustomPos = !!fabLoadPos();
+  var pos = fabApplyPos(fab, fabLoadPos() || fabDefaultPos(btn));
+
+  function setOpen(open){
+    panel.classList.toggle('open', open);
+    panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if(open) fabAdjustPanel();
+  }
+  setOpen(false);
+
+  var dragging = false, moved = false, suppressClick = false;
+  var startX = 0, startY = 0, originX = 0, originY = 0, pointerId = null;
+
+  btn.addEventListener('pointerdown', function(e){
+    if(e.button !== undefined && e.button !== 0 && e.pointerType !== 'touch') return;
+    dragging = true;
+    moved = false;
+    startX = e.clientX;
+    startY = e.clientY;
+    var rect = fab.getBoundingClientRect();
+    originX = rect.left;
+    originY = rect.top;
+    pointerId = e.pointerId;
+    try{ btn.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  btn.addEventListener('pointermove', function(e){
+    if(!dragging) return;
+    var dx = e.clientX - startX, dy = e.clientY - startY;
+    if(!moved && Math.abs(dx) < 4 && Math.abs(dy) < 4) return;
+    moved = true;
+    btn.classList.add('dragging');
+    pos = fabApplyPos(fab, { x: originX + dx, y: originY + dy });
+    if(panel.classList.contains('open')) fabAdjustPanel();
+  });
+  function endDrag(){
+    if(!dragging) return;
+    dragging = false;
+    btn.classList.remove('dragging');
+    if(pointerId !== null){
+      try{ btn.releasePointerCapture(pointerId); }catch(err){}
+      pointerId = null;
+    }
+    if(moved){
+      suppressClick = true;
+      hasCustomPos = true;
+      writeLocal(FAB_KEY, JSON.stringify(pos));
+    }
+  }
+  btn.addEventListener('pointerup', endDrag);
+  btn.addEventListener('pointercancel', endDrag);
+  btn.addEventListener('click', function(e){
+    if(suppressClick){ suppressClick = false; e.preventDefault(); return; }
+    setOpen(!panel.classList.contains('open'));
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Escape' || !panel.classList.contains('open')) return;
+    if(document.querySelector('.modal-backdrop')) return;
+    setOpen(false);
+  });
+  var resizeTimer;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function(){
+      pos = fabApplyPos(fab, hasCustomPos ? pos : fabDefaultPos(btn));
+      if(panel.classList.contains('open')) fabAdjustPanel();
+    }, 120);
+  });
 }
 
 /* ---------- 任务操作 ---------- */
@@ -4622,6 +5482,52 @@ async function onAction(btn){
     }else{
       groupCollapsed[gkey] = true;
       collapseOut(groupCollapseEl(gkey), renderToday);
+    }
+    return;
+  }
+  if(act === 'goal-filter'){
+    goalFilter = btn.getAttribute('data-filter') || 'active';
+    renderGoals();
+    return;
+  }
+  if(act === 'new-goal'){
+    openGoalEditor(null);
+    return;
+  }
+  if(act === 'open-goal'){
+    var openGoal = goalById(id);
+    if(openGoal) openGoalEditor(openGoal);
+    return;
+  }
+  if(act === 'toggle-goal-task'){
+    var goalHit = goalTaskById(id);
+    if(!goalHit) return;
+    if(animatingIds[id]) return;
+    var goalRow = document.querySelector('li.task[data-id="' + id + '"]');
+    var wasGoalDone = isGoalTaskDone(id, todayKey());
+    if(!wasGoalDone && goalRow && !prefersReducedMotion()){
+      animatingIds[id] = true;
+      goalRow.classList.add('task-completing');
+      setTimeout(function(){
+        delete animatingIds[id];
+        toggleGoalTaskLog(id);
+        save();
+        if(isGoalTaskDone(id, todayKey())) doneOpen = true;
+        rerender();
+      }, 180);
+      return;
+    }
+    toggleGoalTaskLog(id);
+    save();
+    if(!wasGoalDone) doneOpen = true;
+    rerender();
+    var goalRowNow = document.querySelector('li.task[data-id="' + id + '"]');
+    if(goalRowNow && !wasGoalDone && !prefersReducedMotion()){
+      goalRowNow.classList.add('task-enter');
+      setTimeout(function(){ goalRowNow.classList.remove('task-enter'); }, 800);
+    }
+    if(!wasGoalDone && goalStatusOf(goalHit.goal) === 'achieved'){
+      toast('目标「' + goalHit.goal.title + '」已达成','ok');
     }
     return;
   }
@@ -4896,6 +5802,7 @@ function init(){
   initQuickAdd();
   initAddToggle();
   initPomodoro();
+  initToolFab();
   initCalendar();
   initAccountFeature();
   window.addEventListener('load', initAccountFeature);
